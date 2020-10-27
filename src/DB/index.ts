@@ -338,16 +338,56 @@ export default {
       searchList: [
         {
           type: 'input',
-          label: '用户手机号',
-          key: 'mobile',
+          label: '项目简称',
+          key: 'name',
         },
         {
-          type: 'rangePicker',
-          label: '选择创建日期',
-          key: 'create_time',
+          type: 'input',
+          label: '项目编码',
+          key: 'code',
         },
+        {
+          type: 'select',
+          label: '区域',
+          key: 'range',
+          optionList: [
+            {
+              value: '1',
+              label: '上架',
+            },
+            {
+              value: '0',
+              label: '下架',
+            },
+          ],
+        },
+        {
+          type: 'select',
+          label: '品牌',
+          key: 'brand',
+          optionList: [
+            {
+              value: '1',
+              label: '上架',
+            },
+            {
+              value: '0',
+              label: '下架',
+            },
+          ],
+        },
+        // {
+        //   type: 'rangePicker',
+        //   label: '选择创建日期',
+        //   key: 'create_time',
+        // },
       ],
       searchActions: [
+        {
+          text: '重置',
+          type: '',
+          key: 'reset',
+        },
         {
           text: '查询',
           type: 'primary',
@@ -358,24 +398,69 @@ export default {
     tableInfo: {
       columnList: [
         {
-          title: '用户ID',
+          title: '项目编码',
           dataIndex: 'id',
           key: 'id',
         },
         {
-          title: '用户昵称',
+          title: '价格区域',
           dataIndex: 'nickName',
           key: 'nickName',
         },
         {
-          title: '用户手机号',
+          title: '项目简称',
           dataIndex: 'mobile',
           key: 'mobile',
         },
         {
-          title: '用户简介',
+          title: '检测意义',
           dataIndex: 'brief',
           key: 'brief',
+        },
+        {
+          title: '性别',
+          dataIndex: 'islock',
+          key: 'islock',
+          needRender: true,
+          enumerate: {
+            0: '启用',
+            1: '停用',
+          },
+        },
+        {
+          title: '套餐类型',
+          dataIndex: 'id',
+          key: 'id',
+        },
+        {
+          title: '售卖价',
+          dataIndex: 'nickName',
+          key: 'nickName',
+        },
+        {
+          title: '品牌',
+          dataIndex: 'mobile',
+          key: 'mobile',
+        },
+        {
+          title: '品牌项目名',
+          dataIndex: 'brief',
+          key: 'brief',
+        },
+        {
+          title: '采样提成',
+          dataIndex: 'brief',
+          key: 'brief',
+        },
+        {
+          title: '添加时间',
+          dataIndex: 'gmtCreate',
+          key: 'gmtCreate',
+        },
+        {
+          title: '修改时间',
+          dataIndex: 'gmtCreate',
+          key: 'gmtCreate',
         },
         {
           title: '状态',
@@ -386,11 +471,6 @@ export default {
             0: '启用',
             1: '停用',
           },
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'gmtCreate',
-          key: 'gmtCreate',
         },
       ],
       actionList: [

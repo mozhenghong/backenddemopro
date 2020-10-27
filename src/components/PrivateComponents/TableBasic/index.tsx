@@ -116,7 +116,7 @@ export default (props: PropsInterface) => {
                   title={title}
                   onConfirm={() => props.actionsHandle && props.actionsHandle(actionItem, record)}
                 >
-                  <span className={styles.actionItem} style={{ color: '#FF5400' }}>
+                  <span className={styles.actionItem} style={{ color: '#1890ff' }}>
                     {actionText}
                   </span>
                 </Popconfirm>
@@ -126,7 +126,7 @@ export default (props: PropsInterface) => {
               <span
                 key={actionItem.key}
                 className={styles.actionItem}
-                style={{ color: '#FF5400' }}
+                style={{ color: '#1890ff' }}
                 onClick={() => props.actionsHandle && props.actionsHandle(actionItem, record)}
               >
                 {actionText}

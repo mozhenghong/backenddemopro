@@ -96,7 +96,7 @@ export default {
           routes: [
             {
               path: '/',
-              redirect: '/manage_user',
+              redirect: '/manage_project',
             },
             // {
             //   name: '数据概况',
@@ -107,19 +107,19 @@ export default {
             {
               name: '项目管理',
               icon: 'user',
-              path: '/manage_user',
+              path: '/manage_project',
               component: './manage_user',
             },
             {
               name: '采样点管理',
               icon: 'gold',
-              path: '/manage_works',
+              path: '/manage_samplingPoint',
               component: './manage_works',
             },
             {
               name: '服务订单管理',
               icon: 'shopping',
-              path: '/manage_commodity',
+              path: '/manage_ServiceOrder',
               component: './manage_commodity',
             },
             {

@@ -1,6 +1,6 @@
 export default {
   define: {
-    BASE_URL: 'https://loan-collection-manager.test.techship.com.cn',
-    BASE_PREFIX: '/collection-manager',
+    BASE_URL: 'https://mehealth-yard-dev-alipay-health.dev.yunhutech.com',
+    BASE_PREFIX: '/',
   },
 };

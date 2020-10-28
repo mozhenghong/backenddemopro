@@ -60,12 +60,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     },
   } = props;
 
-  useEffect(() => {
-    dispatch({
-      type: 'user/getUserPermissionsMenu',
-      payload: { userId },
-    });
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'user/getUserPermissionsMenu',
+  //     payload: { userId },
+  //   });
+  // }, []);
 
   const handleMenuCollapse = (payload: boolean): void => {
     if (dispatch) {
@@ -106,7 +106,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         );
       }}
       menuDataRender={(route) => route}
-      rightContentRender={() => <RightContent />}
+      // rightContentRender={() => <RightContent />}
       {...props}
       {...settings}
     >

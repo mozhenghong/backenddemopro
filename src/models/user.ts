@@ -103,10 +103,10 @@ const UserModel: UserModelType = {
       }
     },
 
-    *getUserPermissionsMenu({ payload }, { call, put }) {
-      const response = yield call(getUserPermissionsMenu, payload);
-      yield put({ type: 'saveUserPermissionsMenu', payload: userPermissionsMenu(response.result) });
-    },
+    // *getUserPermissionsMenu({ payload }, { call, put }) {
+    //   const response = yield call(getUserPermissionsMenu, payload);
+    //   yield put({ type: 'saveUserPermissionsMenu', payload: userPermissionsMenu(response.result) });
+    // },
 
     *logout(_, { call, put }) {
       const response = yield call(accountLogout);

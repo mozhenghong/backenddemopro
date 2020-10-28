@@ -1,6 +1,6 @@
 export default {
   define: {
-    BASE_URL: 'https://loan-collection-manager.aldt.com.cn',
-    BASE_PREFIX: '/collection-manager',
+    BASE_URL: 'https://mehealth-yard.mjiankang.com/mehealth-yard',
+    BASE_PREFIX: '/',
   },
 };

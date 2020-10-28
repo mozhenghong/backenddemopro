@@ -51,14 +51,14 @@ const GlobalModel: GlobalModelType = {
         payload: { ...response },
       });
     },
-    *getPersonAllAuthorizedMenu({ payload }, { call, put }) {
-      const { userId } = payload;
-      const response = yield call(getPersonAllAuthorizedMenu, { userId });
-      yield put({
-        type: 'savePersonAllAuthorizedMenu',
-        payload: { ...response },
-      });
-    },
+    // *getPersonAllAuthorizedMenu({ payload }, { call, put }) {
+    //   const { userId } = payload;
+    //   const response = yield call(getPersonAllAuthorizedMenu, { userId });
+    //   yield put({
+    //     type: 'savePersonAllAuthorizedMenu',
+    //     payload: { ...response },
+    //   });
+    // },
     *getAllLabelList(_, { call, put }) {
       const response = yield call(getAllLabelList);
       yield put({

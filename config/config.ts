@@ -96,14 +96,14 @@ export default {
           routes: [
             {
               path: '/',
-              redirect: '/home',
+              redirect: '/manage_user',
             },
-            {
-              name: '数据概况',
-              icon: 'home',
-              path: '/home',
-              component: './home',
-            },
+            // {
+            //   name: '数据概况',
+            //   icon: 'home',
+            //   path: '/home',
+            //   component: './home',
+            // },
             {
               name: '项目管理',
               icon: 'user',

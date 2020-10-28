@@ -163,7 +163,7 @@ export interface UserModelType {
     login: Effect;
     logout: Effect;
     getHomeInfo: Effect;
-    getUserPermissionsMenu: Effect;
+    // getUserPermissionsMenu: Effect;
   };
   reducers: {
     saveCurrentUser: Reducer<UserModelState>;
@@ -292,7 +292,7 @@ export interface GlobalModelType {
     uploadFile: Effect;
     resetAccountPassword: Effect;
     getAllRoles: Effect;
-    getPersonAllAuthorizedMenu: Effect;
+    // getPersonAllAuthorizedMenu: Effect;
     getAllLabelList: Effect;
     getOrderRatio: Effect;
     updateOrderRatio: Effect;

@@ -82,8 +82,8 @@ const ManageSystemAuthority = (props: PagePropsInterface) => {
   );
 
   useEffect(() => {
-    dispatch({ type: 'global/getPersonAllAuthorizedMenu', payload: { userId } });
-  }, [props.user]);
+  //   dispatch({ type: 'global/getPersonAllAuthorizedMenu', payload: { userId } });
+  // }, [props.user]);
 
   useEffect(() => {
     if (selectTab === 'authority_account_number') {

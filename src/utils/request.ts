@@ -44,7 +44,7 @@ const errorHandler = (error: { response: Response; message: string }): Response 
     notification.error({
       message: error.message,
     });
-    throw new Error(error.message);
+    // throw new Error(error.message);
   }
   return response;
 };
@@ -65,8 +65,8 @@ request.interceptors.request.use((url, options) => ({
   options: {
     ...options,
     headers: {
-      adminToken: window.localStorage.getItem('adminToken') || '',
-      adminUserId: window.localStorage.getItem('adminUserId') || '',
+      // adminToken: window.localStorage.getItem('adminToken') || '',
+      // adminUserId: window.localStorage.getItem('adminUserId') || '',
     },
     interceptors: true,
   },

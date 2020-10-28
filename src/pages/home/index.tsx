@@ -12,23 +12,23 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
-import {getHomeInfo} from '@/services/user';
+// import {getHomeInfo} from '@/services/user';
 
 const Home = (props: PagePropsInterface) => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    // const loadData = async () => {
-    //   const res = await getHomeInfo();
-    //   console.log('res -> ', res);
-    // };
-    const loadData = () => {
-      const res = getHomeInfo().then((res)=> {
-        console.log('res111 -> ', res);
-      });
-    };
-    void loadData();
-  }, []);
+  // useEffect(() => {
+  //   // const loadData = async () => {
+  //   //   const res = await getHomeInfo();
+  //   //   console.log('res -> ', res);
+  //   // };
+  //   const loadData = () => {
+  //     const res = getHomeInfo().then((res)=> {
+  //       console.log('res111 -> ', res);
+  //     });
+  //   };
+  //   void loadData();
+  // }, []);
 
  const getOption = () => {
     let option  =   {title: {

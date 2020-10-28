@@ -18,7 +18,7 @@ const ManageCommodity = () => {
   const [code, setCode] = useState('');
   const [range, setRange] = useState('');
   const [brand, setBrand] = useState('');
-  const [visibleAdd, setVisibleAdd] = useState(true);
+  const [visibleAdd, setVisibleAdd] = useState(false);
   const [visibleSelect, setVisibleSelect] = useState(false);
   const [visiblemodify, setVisiblemodify] = useState(false);
   const [newordertime, setNewordertime] = useState('');

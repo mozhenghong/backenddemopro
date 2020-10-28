@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '2C检验管理后台',
+  title: '检验管理后台',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

@@ -5,6 +5,7 @@ export async function accountLogin(params: LoginParamsType) {
   return request('/user/login', {
     method: 'POST',
     params,
+    headers: {}
   });
 }
 

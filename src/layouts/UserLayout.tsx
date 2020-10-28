@@ -48,7 +48,7 @@ const UserLayout: React.FC<UserLayoutProps> = props => {
           </div>
           {children}
         </div>
-        <DefaultFooter links={false} copyright="2C检验管理后台" />
+        <DefaultFooter links={false} copyright="检验管理后台" />
       </div>
     </>
   );

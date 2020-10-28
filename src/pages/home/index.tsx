@@ -5,22 +5,31 @@ import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { PagePropsInterface } from '@/components/Interface';
 import styles from './index.less';
-import 'echarts/lib/chart/bar';  //折线图是line,饼图改为pie,柱形图改为bar
-import 'echarts/lib/chart/line';  //折线图是line,饼图改为pie,柱形图改为bar
+import 'echarts/lib/chart/bar';
+import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
+import {getHomeInfo} from '@/services/user';
 
 const Home = (props: PagePropsInterface) => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    props.dispatch({ type: 'user/getHomeInfo' });
-    setLoading(false);
+    // const loadData = async () => {
+    //   const res = await getHomeInfo();
+    //   console.log('res -> ', res);
+    // };
+    const loadData = () => {
+      const res = getHomeInfo().then((res)=> {
+        console.log('res111 -> ', res);
+      });
+    };
+    void loadData();
   }, []);
-  
+
  const getOption = () => {
     let option  =   {title: {
       text: '世界人口总量',

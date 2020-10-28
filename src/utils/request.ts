@@ -50,19 +50,12 @@ const errorHandler = (error: { response: Response; message: string }): Response 
 };
 
 /**
- * 基础参数
- */
-// const baseUrl = 'http://47.114.107.183:8081';
-const baseUrl = process.env.NODE_ENV === 'production' ? 'https://admin-api.yu-zuo.com' : '';
-const basePrefix = '/admin';
-
-/**
  * 配置request请求时的默认参数
  */
 const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
-  prefix: `${baseUrl}${basePrefix}`, // 前缀, 用于覆盖统一设置的prefix
+  prefix: `${BASE_URL}${BASE_PREFIX}`, // 前缀, 用于覆盖统一设置的prefix
 });
 
 /**

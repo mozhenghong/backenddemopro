@@ -7,7 +7,6 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
-  DefaultFooter,
 } from '@ant-design/pro-layout';
 import React, { useEffect } from 'react';
 import Link from 'umi/link';
@@ -57,7 +56,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     settings,
     location = { pathname: '/' },
     user: {
-      userPermissionsMenu,
       currentUser: { id: userId },
     },
   } = props;
@@ -98,12 +96,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
-      breadcrumbRender={(routers = []) => {
-        if (routers.length && routers[0].path === '/manage_system') {
-          routers.shift();
-        }
-        return routers;
-      }}
       itemRender={(route, params, routes, paths) => {
         // const first = routes.indexOf(route) === 0;
         const last = routes.indexOf(route) === routes.length - 1;
@@ -113,8 +105,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      // footerRender={() => <DefaultFooter links={false} copyright="头脑贩售" />}
-      menuDataRender={() => userPermissionsMenu}
+      menuDataRender={(route) => route}
       rightContentRender={() => <RightContent />}
       {...props}
       {...settings}

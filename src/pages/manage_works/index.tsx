@@ -503,7 +503,7 @@ useEffect(() => {
           <Input placeholder="请输入诊所名称" value={merchantName} onChange={(e) => {setMerchantName(e.target.value) }} />
         </Form.Item>
         <Form.Item label="区域">
-          <Cascader options={areaList} onChange={(value)=> {setArea(value);}} value={area} placeholder="请选择区域" />,
+          <Cascader options={areaList} onChange={(value)=> {setArea(value);}} value={area} placeholder="请选择区域" changeOnSelect />,
         </Form.Item>
         <Form.Item>
           <Button onClick={onReset} style={{ marginRight: '20px' }}>重置</Button>

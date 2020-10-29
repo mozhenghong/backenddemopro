@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import styles from './index.less';
 import { Form, Button, Input, Select, Table, Tag, Modal, Checkbox, Upload, message, Popover, Row, Col  } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { getServiceOrderList, getServiceOrderDetail} from '@/services/alipay';
+import { getServiceOrderList, getServiceOrderDetail, cancelOrder} from '@/services/alipay';
 
 
 const { TextArea } = Input;
@@ -14,13 +14,15 @@ const layout = {
 };
 const ManageCommodity = () => {
   //列表相关
-  const [orderNo, setOrderNo] = useState('');
-  const [itemName, setItemName] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [orderStatus, setOrderStatus] = useState(3);
+  
+  const [serviceOrderList, setServiceOrderList] = useState([]);
+  const [orderNo, setOrderNo] = useState(null);
+  const [itemName, setItemName] = useState(null);
+  const [mobile, setMobile] = useState(null);
+  const [orderStatus, setOrderStatus] = useState(undefined);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [pageTotal, setPageTotal] = useState(40);
+  const [pageTotal, setPageTotal] = useState(20);
   const [cancelId, setCancelId] = useState('');
   const [detailId, setDetailId] = useState('');
 
@@ -34,12 +36,18 @@ const ManageCommodity = () => {
   
   const getServiceOrderListMethod = () => {
     getServiceOrderList({order_no:orderNo, item_name:itemName, mobile:mobile,order_status:orderStatus,'page_index': pageIndex, 'page_size': pageSize}).then((res) => {
+      if(res.code==0){
+        setServiceOrderList( res.data.reserve_infos||[])
+        setPageTotal(res.data.total)
+      }
      
     })
   }
   const getServiceOrderDetailMethod = (data) => {
     getServiceOrderDetail(data).then((res) => {
-      // setDetailData(res.data)
+      if(res&&res.code===0){
+        setDetailData(res.data)
+      }
     })
   }
   useEffect(() => {
@@ -51,51 +59,51 @@ const accountcolumnsDetail = [
     dataIndex: 'item_name',
     key: 'item_name',
   },
-  {
-    title: '项目收费',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '支出采样费',
-    dataIndex: 'name',
-    key: 'name',
-  },
+  // {
+  //   title: '项目收费',
+  //   dataIndex: 'name',
+  //   key: 'name',
+  // },
+  // {
+  //   title: '支出采样费',
+  //   dataIndex: 'name',
+  //   key: 'name',
+  // },
 ]
   const AddcolumnsDetail = [
     {
       title: '操作时间',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'create_time',
+      key: 'create_time',
     },
     {
       title: '操作来源',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'opt_source_name',
+      key: 'opt_source_name',
+
     },
     {
       title: '操作备注',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'opt_remark',
+      key: 'opt_remark',
     },
   ]
   const columns = [
     {
       title: '订单编号',
-      dataIndex: 'order_id',
-      key: 'order_id',
+      dataIndex: 'order_no',
+      key: 'order_no',
     },
     {
-      title: '项目名称',
+      title: '商品名称',
       dataIndex: 'package_name',
       key: 'package_name',
     },
-    {
-      title: '订单金额',
-      dataIndex: 'pay_price',
-      key: 'pay_price',
-      // render: text => <a>{text}</a>,
-    },
+    // {
+    //   title: '订单金额',
+    //   dataIndex: 'pay_price',
+    //   key: 'pay_price',
+    // },
     {
       title: '实付金额',
       dataIndex: 'pay_price',
@@ -172,7 +180,7 @@ const accountcolumnsDetail = [
             getServiceOrderDetailMethod({order_id: record.order_id})
           }}>查看订单</a>
             <a style={{ padding: '0 5px' }} onClick={() => {setCancelId(record.order_id) ; setVisibleCancel(true)}}>取消订单</a>
-          <a style={{ padding: '0 5px' }} onClick={() => setVisiblemodify(true)}>修改预约时间</a>
+          {/* <a style={{ padding: '0 5px' }} onClick={() => setVisiblemodify(true)}>修改预约时间</a> */}
         </div>
       ),
     },
@@ -213,18 +221,24 @@ const accountcolumnsDetail = [
     setPageSize(pageSize)
   }
   const onReset = () => {
-    setOrderNo('')
-    setItemName('')
-    setMobile('')
+    setOrderNo(null)
+    setItemName(null)
+    setMobile(null)
     setOrderStatus(undefined)
     setPageIndex(1)
     setPageSize(20)
-    getServiceOrderList({order_no:'', item_name:'', mobile:'',order_status:null,'page_index': 1, 'page_size': 20}).then((res) => {
+    getServiceOrderList({order_no:null, item_name:null, mobile:null,order_status:null,'page_index': 1, 'page_size': 20}).then((res) => {
      
     })
   }
   const handleCancelOrder = () => {
-    setVisibleCancel(false)
+    cancelOrder({'order_id':cancelId}).then((res) => {
+      if(res&&res.code===0){
+        message.success('操作成功！')
+        setVisibleCancel(false)
+        getServiceOrderListMethod()
+      }
+    })
   }
   const handleOk = () => {
     setVisibleAdd(false)
@@ -258,7 +272,7 @@ const accountcolumnsDetail = [
             <Select.Option value={3}>未预约</Select.Option>
             <Select.Option value={4}>已预约</Select.Option>
             <Select.Option value={5}>已到检</Select.Option>
-            <Select.Option value={6}>退款</Select.Option>
+            <Select.Option value={6}>订单结束</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item>
@@ -268,7 +282,7 @@ const accountcolumnsDetail = [
           </Button>
         </Form.Item>
       </Form>
-      <Table columns={columns} dataSource={data} 
+      <Table columns={columns} dataSource={serviceOrderList} 
        pagination={{
         showSizeChanger: true,
         onShowSizeChange: onShowSizeChange,
@@ -308,26 +322,30 @@ const accountcolumnsDetail = [
       >
         <div className={styles.serviceManageWrap}>
           <div className={styles.titleWrap}>
-            <div className={styles.titlestatus}>待预约</div>
-            <div>有效期至2010-12-01</div>
+          {detailData.order_status===3&&<div className={styles.titlestatus}>待预约</div>}
+          {detailData.order_status===4&&<div className={styles.titlestatus}>待核销</div>}
+          {detailData.order_status===5&&<div className={styles.titlestatus}>已核销</div>}
+          {detailData.order_status!==5&&<div>有效期至{detailData.period_time}</div>}
+          {detailData.order_status===5&&detailData.hava_report===1&&<div>报告已出</div>}
           </div>
           <div className={styles.detailWrap}>
             <div className={styles.title}>基本信息</div>
             <Row className={styles.row}>
-              <Col span={12}>订单编号：{detailData.order_id}</Col>
+              <Col span={12}>订单编号：{detailData.order_no}</Col>
               <Col span={12}>预约采样时间：{detailData.reserve_date}</Col>
             </Row>
             <Row className={styles.row}>
-              <Col span={12}>支付方式：{detailData.name}</Col>
-              <Col span={12}>订单来源：{detailData.name}</Col>
+              <Col span={12}>支付方式：支付宝</Col>
+              <Col span={12}>订单来源：阿里健康</Col>
             </Row>
           </div>
           <div className={styles.detailWrap}>
             <div className={styles.title}>预约人信息</div>
             <Row className={styles.row}>
               <Col span={12}>姓名：{detailData.name}</Col>
-              {detailData.gender===0&&<Col span={12}>性别：男</Col>}
-              {detailData.gender===1&&<Col span={12}>性别：女</Col>}
+              {detailData.gender==='0'&&<Col span={12}>性别：男</Col>}
+              {detailData.gender==='1'&&<Col span={12}>性别：女</Col>}
+              {detailData.gender==='2'&&<Col span={12}>性别：通用</Col>}
             </Row>
             <Row className={styles.row}>
               <Col span={12}>年龄：{detailData.age}</Col>
@@ -346,18 +364,22 @@ const accountcolumnsDetail = [
             </Row>
           </div>
           <div className={styles.detailWrap}>
-            <div className={styles.title} style={{paddingBottom:'20px'}}>项目信息</div>
-            <Table columns={accountcolumnsDetail} dataSource={[]} pagination={false} bordered />
+            <div className={styles.title} style={{paddingBottom:'20px'}}>商品信息</div>
+            <Row className={styles.row}>
+              <Col span={12}><img src={detailData.package_info&&detailData.package_info.list_image} alt=""/> {detailData.package_info&&detailData.package_info.package_name}</Col>
+              <Col span={12}>￥{detailData.package_info&&detailData.package_info.settlement_price}</Col>
+            </Row>
+            <div className={styles.title} style={{paddingBottom:'20px'}}>项目明细</div>
+            <Table columns={accountcolumnsDetail} dataSource={detailData.package_info&&detailData.package_info.child_item_list||[]} pagination={false} bordered />
             <div className={styles.title} style={{paddingTop:'20px'}}>费用信息</div>
             <Row className={styles.row}>
-              <Col span={8}>项目合计：{detailData.settlement_price}</Col>
               <Col span={8}>实付金额：{detailData.pay_price}</Col>
-              <Col span={8}>采样费：{detailData.sampling_price}</Col>
+              <Col span={8}>采样费：{detailData.package_info&&detailData.package_info.settlement_price}</Col>
             </Row>
           </div>
           <div className={styles.detailWrap}>
             <div className={styles.title} style={{marginBottom:'20px'}}>操作信息</div>
-            <Table columns={AddcolumnsDetail} dataSource={data} pagination={false} bordered/>
+            <Table columns={AddcolumnsDetail} dataSource={detailData.operations||[]} pagination={false} bordered/>
           </div>
         </div>
       </Modal>

@@ -73,29 +73,29 @@ request.interceptors.request.use((url, options) => ({
 }));
 
 request.interceptors.response.use(async response => {
-  if (response.url.indexOf('exportUserCapital') >= 0) {
-    return response;
-  }
+  // if (response.url.indexOf('exportUserCapital') >= 0) {
+  //   return response;
+  // }
   const data = await response.clone().json();
-  if (data.code === 3 && window.localStorage.getItem('tokenExpired') !== 'expired') {
-    window.localStorage.setItem('tokenExpired', 'expired');
-    notification.error({
-      message: `登陆过期，请重新登录！`,
-      description: data.errorMsg,
-    });
-    window.localStorage.clear();
-    const { redirect } = getPageQuery();
-    if (window.location.pathname !== '/user/login' && !redirect) {
-      router.replace({
-        pathname: '/user/login',
-        search: stringify({
-          redirect: window.location.href,
-        }),
-      });
-    }
-  }
+  // if (data.code === 3 && window.localStorage.getItem('tokenExpired') !== 'expired') {
+  //   window.localStorage.setItem('tokenExpired', 'expired');
+  //   notification.error({
+  //     message: `登陆过期，请重新登录！`,
+  //     description: data.errorMsg,
+  //   });
+  //   window.localStorage.clear();
+  //   const { redirect } = getPageQuery();
+  //   if (window.location.pathname !== '/user/login' && !redirect) {
+  //     router.replace({
+  //       pathname: '/user/login',
+  //       search: stringify({
+  //         redirect: window.location.href,
+  //       }),
+  //     });
+  //   }
+  // }
   if (data.code !== 0) {
-    throw new Error(data.errorMsg);
+    throw new Error(data.msg);
   }
   return response;
 });

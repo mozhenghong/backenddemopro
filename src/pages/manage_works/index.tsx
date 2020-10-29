@@ -6,6 +6,7 @@ import styles from './index.less';
 import { Form, Button, Input, Select, Table, Tag, Modal, Checkbox, Upload, message, Popover, Calendar, Cascader , Descriptions} from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import moment from 'moment'
+import areaList from '../../components/area'
 import {getsamplingPointList, getArea, downShelf, getMerchant, addMerchant, updateMerchant, getMerchantExamination, deleteMerchant, getAddMerchantExamination, AddMerchantExamination} from '@/services/alipay';
 
 
@@ -18,14 +19,15 @@ const layout = {
 
 const ManageWorks = () => {
   //采样点列表相关
-  const [name, setName] = useState('');
-  const [account, setAccount] = useState('');
-  const [merchantName, setMerchantName] = useState('');
-  const [area, setArea] = useState([1,2,3]);
+  const [columnsData, setColumnsData] = useState([]);
+  const [name, setName] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [merchantName, setMerchantName] = useState(null);
+  const [area, setArea] = useState([]);
   const [areaOptions, setAreaOptions] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [pageTotal, setPageTotal] = useState(40);
+  const [pageTotal, setPageTotal] = useState(20);
   //下架
   const [visibleLowershelf, setVisibleLowershelf] = useState(false);
   const [lowershelfId, setLowershelfId] = useState('');
@@ -43,14 +45,17 @@ const [introduction, setIntroduction] = useState('');
 const [instruction, setInstruction] = useState('');
 
 //采样点项目管理
+const [merchantExaminationColumns, setMerchantExaminationColumns] = useState([]);
 const [pageIndexManage, setPageIndexManage] = useState(1);
 const [pageSizeManage, setPageSizeManage] = useState(20);
-const [pageTotalManage, setPageTotalManage] = useState(40);
+const [pageTotalManage, setPageTotalManage] = useState(20);
 const [manageAccount, setManageAccount] = useState('');
 const [pageIndexManageAdd, setPageIndexManageAdd] = useState(1);
 const [pageSizeManageAdd, setPageSizeManageAdd] = useState(20);
 const [pageTotalManageAdd, setPageTotalManageAdd] = useState(40);
 const [projectCode, setProjectCode] = useState('');
+const [addMerchantExaminationColumns, setAddMerchantExaminationColumns] = useState([]);
+
 
 
 
@@ -66,58 +71,82 @@ const [isAdd, setIsAdd] = useState(true);
 //查询新增项目列表
 const getAddMerchantExaminationMethod = (data) => {
   getAddMerchantExamination(data).then((res) => {
-
+    if(res&&res.code===0){
+      setAddMerchantExaminationColumns(res.data.examination_package_list)
+      setPageTotalManageAdd(res.data.total)
+    }
   })
 }
 
 //查询采样点项目
 const getMerchantExaminationMethod = (data) => {
   getMerchantExamination(data).then((res) => {
-
+    if(res&&res.code===0){
+      setMerchantExaminationColumns(res.data.examination_package_list)
+      setPageTotalManage(res.data.total)
+    }
   })
 }
 //删除采样点项目
 const deleteMerchantMethod = (data) => {
   deleteMerchant(data).then((res) => {
-
+    if(res&&res.code===0){
+      message.success('删除成功！')
+    }
   })
 }
 //新增采样点项目
 const AddMerchantExaminationMethod = (data) => {
   AddMerchantExamination(data).then((res) => {
-
+    if(res&&res.code===0){
+      setVisibleSelect(false)
+      setVisiblemanage(true)
+      getMerchantExaminationMethod({account:manageAccount, page_index:pageIndexManage, page_size: pageSizeManage })
+    }
   })
 }
 //新增采样点
 const addMerchantMethod = () => {
   addMerchant({account:detailAccount, contract_name:contractName, contract_phone: contractPhone, instruction,introduction, name:merchantAddName, reserve_time_list:reserveTimeList, stock }).then((res) => {
-
+    if(res&&res.code===0){
+      message.success('操作成功')
+      getsamplingPointListMethod()
+    }
   })
 }
 //更新采样点
 const updateMerchantMethod = () => {
   updateMerchant({id:detailId, account:detailAccount, contract_name:contractName, contract_phone: contractPhone, instruction,introduction, name:merchantAddName, reserve_time_list:reserveTimeList, stock }).then((res) => {
-
+    if(res&&res.code===0){
+      message.success('操作成功')
+      getsamplingPointListMethod()
+    }
   })
 }
 //获取采样点列表
 const getsamplingPointListMethod = () => {
-  getsamplingPointList({name, account, merchant_name:merchantName, province_code: area[0], city_code:area[1], district_code:area[2],page_index: pageIndex, page_size: pageSize }).then((res) => {
-
+  getsamplingPointList({name:name, account:account, merchant_name:merchantName, province_code: area[0]||null, city_code:area[1]||null, district_code:area[2]||null,page_index: pageIndex, page_size: pageSize }).then((res) => {
+    if(res&&res.code===0){
+      setColumnsData(res.data.merchant_examination_list)
+      setPageTotal(res.data.total)
+    }
   })
 }
 //获取诊所详情
 const getMerchantMethod = (data) => {
   getMerchant(data).then((res) => {
-    // setMerchantRecord(res.data)
-    // setDetailAccount(res.data.account)
-    // setContractName(res.data.contract_name)
-    // setContractPhone(res.data.contract_phone)
-    // setMerchantAddName(res.data.name)
-    // setReserveTimeList(res.data.reserve_time_list)
-    // setStock(res.data.stock)
-    // setIntroduction(res.data.setIntroduction)
-    // setInstruction(res.data.setInstruction)
+    if(res&&res.code===0){
+      setMerchantRecord(res.data)
+      setDetailId(res.id)
+      setDetailAccount(res.data.account)
+      setContractName(res.data.contract_name)
+      setContractPhone(res.data.contract_phone)
+      setMerchantAddName(res.data.name)
+      setReserveTimeList(res.data.reserve_time_list||[])
+      setStock(res.data.stock)
+      setIntroduction(res.data.introduction)
+      setInstruction(res.data.instruction)
+    }
   })
 }
 
@@ -126,7 +155,6 @@ useEffect(() => {
     // setAreaOptions(res.data)
   })
   getsamplingPointListMethod()
-  getMerchantMethod({account:''})
 }, []);
 
   const Selectcolumns = [
@@ -141,7 +169,7 @@ useEffect(() => {
       key: 'price_area_name',
     },
     {
-      title: '项目简称',
+      title: '商品名称',
       dataIndex: 'project_name',
       key: 'project_name',
     },
@@ -189,7 +217,7 @@ useEffect(() => {
       render: (text, record) => (
         <div>
           <a style={{ padding: '0 5px' }} onClick={() => {
-            AddMerchantExaminationMethod({account:record.account, examination_package_id:record.examination_package_id})
+            AddMerchantExaminationMethod({account:manageAccount, examination_package_id:record.examination_package_id})
           }}>选择</a>
         </div>
       ),
@@ -207,7 +235,7 @@ useEffect(() => {
       key: 'price_area_id',
     },
     {
-      title: '项目简称',
+      title: '商品名称',
       dataIndex: 'package_name',
       key: 'package_name',
     },
@@ -250,7 +278,7 @@ useEffect(() => {
       render: (text, record) => (
         <div>
           <a style={{ padding: '0 5px' }} onClick={() => {
-           deleteMerchantMethod({id: record.id, account: record.account, examination_package_id: record.examination_package_id})
+           deleteMerchantMethod({id: record.id, account:manageAccount, examination_package_id: record.examination_package_id})
            getMerchantExaminationMethod({account:manageAccount, page_index:pageIndexManage, page_size: pageSizeManage })
           }}>删除</a>
         </div>
@@ -318,7 +346,7 @@ useEffect(() => {
             setVisibleAdd(true)
             setIsAdd(false)
             setDetailAccount(record.account)
-            setDetailId(record.id)
+            // setDetailId(record.id)
             getMerchantMethod({account:record.account})
           }}>编辑</a>
             <a style={{ padding: '0 5px' }} onClick={() => { setVisibleLowershelf(true) ; setLowershelfId(record.account)}}>批量下架</a>
@@ -357,18 +385,18 @@ useEffect(() => {
     },
   ];
   const onReset = () => {
-    setName('')
-    setAccount('')
-    setMerchantName('')
+    setName(null)
+    setAccount(null)
+    setMerchantName(null)
     setArea([])
     setPageIndex(1)
     setPageSize(20)
-    getsamplingPointList({name: '', account: '', merchant_name:'', province_code: '', city_code:'', district_code:'',page_index: 1, page_size: 20 }).then((res) => {
-
+    getsamplingPointList({name: null, account: null, merchant_name:null, province_code: null, city_code:null, district_code:null,page_index: 1, page_size: 20 }).then((res) => {
+      if(res.code===0){
+        setColumnsData(res.data.merchant_examination_list)
+        setPageTotal(res.data.total)
+      }
     })
-  }
-  const handleSubmit = () => {
-    console.log('111', name, code, range, brand)
   }
   const handleAdd = () => {
     setVisibleAdd(true)
@@ -424,12 +452,17 @@ useEffect(() => {
   }
   const LowershelfOk = () => {
     downShelf({ 'account': lowershelfId }).then((res) => {
-      setVisibleLowershelf(false)
+      if(res&&res.code===0){
+        message.success('操作成功！')
+        setVisibleLowershelf(false)
+        getsamplingPointListMethod()
+      }
     })
   }
   
   const onChange = (date, e) => {
-    const dateString = moment(date).format('YYYY-MM-DD');
+    // const dateString = moment(date).format('YYYY-MM-DD');
+    const dateString = moment(moment(date).format('YYYY-MM-DD')).valueOf()
     let arr = reserveTimeList
     if (e.target.checked) {
       arr.push(dateString);
@@ -438,48 +471,24 @@ useEffect(() => {
       arr.splice(deleteIndex, 1);
     }
     setReserveTimeList(arr)
-    console.log('e -> ', arr);
   }
 
   const dateCellRender = (value) => {
-    return (
-      <Checkbox value={reserveTimeList} onChange={onChange.bind(null, value)} />
-    );
+    // console.log('value==>',moment(value).valueOf())
+    // return (
+    //     <Checkbox onChange={onChange.bind(null, value)} />
+    //   );
+    if(reserveTimeList.indexOf(moment(moment(value).format('YYYY-MM-DD')).valueOf())>-1){
+      return (
+        <Checkbox checked={true} onChange={onChange.bind(null, value)} />
+      );
+    }else{
+      return (
+        <Checkbox checked={false} onChange={onChange.bind(null, value)} />
+      );
+    }
+    
   }
-  const options = [
-    {
-      value: '111',
-      label: 'Zhejiang',
-      children: [
-        {
-          value: '222',
-          label: 'Hangzhou',
-          children: [
-            {
-              value: 'xihu',
-              label: 'West Lake',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      value: '333',
-      label: 'Jiangsu',
-      children: [
-        {
-          value: 'nanjing',
-          label: 'Nanjing',
-          children: [
-            {
-              value: 'zhonghuamen',
-              label: 'Zhong Hua Men',
-            },
-          ],
-        },
-      ],
-    },
-  ];
   return (
     <PageHeaderWrapper className={styles.main}>
       {/* <PageBasic page={page} /> */}
@@ -494,7 +503,7 @@ useEffect(() => {
           <Input placeholder="请输入诊所名称" value={merchantName} onChange={(e) => {setMerchantName(e.target.value) }} />
         </Form.Item>
         <Form.Item label="区域">
-          <Cascader options={options} onChange={(value)=> {setArea(value); console.log('5555',value);}} placeholder="请选择区域" />,
+          <Cascader options={areaList} onChange={(value)=> {setArea(value);}} value={area} placeholder="请选择区域" />,
         </Form.Item>
         <Form.Item>
           <Button onClick={onReset} style={{ marginRight: '20px' }}>重置</Button>
@@ -506,7 +515,7 @@ useEffect(() => {
       <div className={styles.addbutton}>
         <Button onClick={handleAdd} style={{ marginRight: '20px' }} type="primary" >新增采样点</Button>
       </div>
-      <Table columns={columns} dataSource={data} 
+      <Table columns={columns} dataSource={columnsData} 
         pagination={{
           showSizeChanger: true,
           onShowSizeChange: onShowSizeChange,
@@ -593,7 +602,7 @@ useEffect(() => {
           setVisiblemanage(false)
           setVisibleSelect(true)
         }}>+添加项目</Button>
-        <Table columns={Managecolumns} dataSource={data} 
+        <Table columns={Managecolumns} dataSource={merchantExaminationColumns} 
           pagination={{
             showSizeChanger: true,
             onShowSizeChange: onShowSizeChangeManage,
@@ -625,7 +634,7 @@ useEffect(() => {
           </Button>
           </Form.Item>
         </Form>
-        <Table columns={Selectcolumns} dataSource={data} 
+        <Table columns={Selectcolumns} dataSource={addMerchantExaminationColumns} 
          pagination={{
           showSizeChanger: true,
           onShowSizeChange: onShowSizeChangeManageAdd,

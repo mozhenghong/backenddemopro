@@ -56,8 +56,15 @@ export async function getServiceOrderList(data) {
         data,
     });
 }
-export async function  getServiceOrderDetail(data) {
+export async function getServiceOrderDetail(data) {
     return request('order/v1/examination/reserve/detail', {
+        method: 'POST',
+        data,
+    });
+}
+//取消订单
+export async function cancelOrder(data) {
+    return request('order/v1/examination/reserve/end', {
         method: 'POST',
         data,
     });
@@ -130,6 +137,13 @@ export async function getAddMerchantExamination(data) {
 //新增采样点管理项目
 export async function AddMerchantExamination(data) {
     return request('merchant_examination_package/v1/insert', {
+        method: 'POST',
+        data
+    });
+}
+//查询下属地区
+export async function getRegionListByParentCode(data) {
+    return request('common/region/get_region_list_by_parent_code', {
         method: 'POST',
         data
     });

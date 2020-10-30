@@ -215,10 +215,24 @@ const accountcolumnsDetail = [
   const onShowSizeChange = (current, pageSize) => {
     setPageIndex(current)
     setPageSize(pageSize)
+    getServiceOrderList({order_no:orderNo, item_name:itemName, mobile:mobile,order_status:orderStatus,'page_index': current, 'page_size': pageSize}).then((res) => {
+      if(res.code==0){
+        setServiceOrderList( res.data.reserve_infos||[])
+        setPageTotal(res.data.total)
+      }
+     
+    })
   }
   const pageChange = (current, pageSize) => {
     setPageIndex(current)
     setPageSize(pageSize)
+    getServiceOrderList({order_no:orderNo, item_name:itemName, mobile:mobile,order_status:orderStatus,'page_index': current, 'page_size': pageSize}).then((res) => {
+      if(res.code==0){
+        setServiceOrderList( res.data.reserve_infos||[])
+        setPageTotal(res.data.total)
+      }
+     
+    })
   }
   const onReset = () => {
     setOrderNo(null)

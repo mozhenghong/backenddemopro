@@ -278,7 +278,7 @@ useEffect(() => {
       render: (text, record) => (
         <div>
           <a style={{ padding: '0 5px' }} onClick={() => {
-           deleteMerchantMethod({id: record.id, account:manageAccount, examination_package_id: record.examination_package_id})
+           deleteMerchantMethod({id: record.merchant_examination_package_id, account:manageAccount, examination_package_id: record.examination_package_id})
            getMerchantExaminationMethod({account:manageAccount, page_index:pageIndexManage, page_size: pageSizeManage })
           }}>删除</a>
         </div>
@@ -429,26 +429,42 @@ useEffect(() => {
   const onShowSizeChange = (current, pageSize) => {
     setPageIndex(current)
     setPageSize(pageSize)
+    getsamplingPointList({name:name, account:account, merchant_name:merchantName, province_code: area[0]||null, city_code:area[1]||null, district_code:area[2]||null,page_index: current, page_size: pageSize }).then((res) => {
+      if(res&&res.code===0){
+        setColumnsData(res.data.merchant_examination_list)
+        setPageTotal(res.data.total)
+      }
+    })
   }
   const pageChange = (current, pageSize) => {
     setPageIndex(current)
     setPageSize(pageSize)
+    getsamplingPointList({name:name, account:account, merchant_name:merchantName, province_code: area[0]||null, city_code:area[1]||null, district_code:area[2]||null,page_index: current, page_size: pageSize }).then((res) => {
+      if(res&&res.code===0){
+        setColumnsData(res.data.merchant_examination_list)
+        setPageTotal(res.data.total)
+      }
+    })
   }
   const onShowSizeChangeManage = (current, pageSize) => {
     setPageIndexManage(current)
     setPageSizeManage(pageSize)
+    getMerchantExaminationMethod({account:manageAccount, page_index:current, page_size: pageSize })
   }
   const pageChangeManage = (current, pageSize) => {
     setPageIndexManage(current)
     setPageSizeManage(pageSize)
+    getMerchantExaminationMethod({account:manageAccount, page_index:current, page_size: pageSize })
   }
   const onShowSizeChangeManageAdd = (current, pageSize) => {
     setPageIndexManageAdd(current)
     setPageSizeManageAdd(pageSize)
+    getAddMerchantExaminationMethod({project_code:projectCode, shelf_status:2, page_index: current, page_size: pageSize })
   }
   const pageChangeManageAdd = (current, pageSize) => {
     setPageIndexManageAdd(current)
     setPageSizeManageAdd(pageSize)
+    getAddMerchantExaminationMethod({project_code:projectCode, shelf_status:2, page_index: current, page_size: pageSize })
   }
   const LowershelfOk = () => {
     downShelf({ 'account': lowershelfId }).then((res) => {

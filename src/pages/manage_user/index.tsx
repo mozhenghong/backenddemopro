@@ -350,18 +350,42 @@ const ManageUser = () => {
   const onShowSizeChange = (current, pageSize) => {
     setPageIndex(current)
     setPageSize(pageSize)
+    getProjectList({ 'package_name': projectName, 'project_code': projectCode, 'price_area_id': priceArea, 'brand_id': brandId, 'page_index': current, 'page_size': pageSize }).then((res) => {
+      if(res.code===0){
+        setProjectColumnData(res.data.examination_package_list)
+        setPageTotal(res.data.total)
+      }
+    })
   }
   const pageChange = (current, pageSize) => {
     setPageIndex(current)
     setPageSize(pageSize)
+    getProjectList({ 'package_name': projectName, 'project_code': projectCode, 'price_area_id': priceArea, 'brand_id': brandId, 'page_index': current, 'page_size': pageSize }).then((res) => {
+      if(res.code===0){
+        setProjectColumnData(res.data.examination_package_list)
+        setPageTotal(res.data.total)
+      }
+    })
   }
   const onShowSizeChangeB = (current, pageSize) => {
     setPageIndexB(current)
     setPageSizeB(pageSize)
+    getSelectProjectList({ 'project_code': projectCodeB, 'price_area_id': priceAreaB, 'brand_id': brandIdB, 'page_index': current, 'page_size': pageSize }).then((res) => {
+      if(res.code===0){
+        setProjectColumnDataB(res.data.examination_package_list||[])
+        setPageTotalB(res.data.total)
+      }
+    })
   }
   const pageChangeB = (current, pageSize) => {
     setPageIndexB(current)
     setPageSizeB(pageSize)
+    getSelectProjectList({ 'project_code': projectCodeB, 'price_area_id': priceAreaB, 'brand_id': brandIdB, 'page_index': current, 'page_size': pageSize }).then((res) => {
+      if(res.code===0){
+        setProjectColumnDataB(res.data.examination_package_list||[])
+        setPageTotalB(res.data.total)
+      }
+    })
   }
   const UpperShelfOk = () => {
     upperShelf({ 'examination_package_id': upperShelfId }).then((res) => {
